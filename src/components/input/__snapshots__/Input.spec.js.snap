@@ -2,8 +2,8 @@
 
 exports[`BInput render correctly 1`] = `
 <div class="control is-clearfix"><input type="text" autocomplete="on" class="input">
-    <!---->
-    <!---->
-    <!---->
+  <!---->
+  <!---->
+  <!---->
 </div>
 `;

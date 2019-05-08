@@ -99,13 +99,13 @@
 </template>
 
 <script>
-    import { default as TimepickerMixin } from '../../utils/TimepickerMixin'
     import Dropdown from '../dropdown/Dropdown'
     import DropdownItem from '../dropdown/DropdownItem'
     import Input from '../input/Input'
     import Field from '../field/Field'
     import Select from '../select/Select'
     import Icon from '../icon/Icon'
+    import TimepickerMixin from '../../utils/TimepickerMixin'
 
     export default {
         name: 'BTimepicker',

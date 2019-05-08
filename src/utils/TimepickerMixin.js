@@ -31,14 +31,14 @@ export default {
         },
         timeFormatter: {
             type: Function,
-            default: (date) => {
-                this.formatTime(date)
+            default: (date, vm) => {
+                vm.formatTime(date)
             }
         },
         timeParser: {
             type: Function,
-            default: (date) => {
-                this.parseTime(date)
+            default: (date, vm) => {
+                vm.parseTime(date)
             }
         },
         mobileNative: {
