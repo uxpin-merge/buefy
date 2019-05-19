@@ -11,7 +11,7 @@
                 ref="input"
                 slot="trigger"
                 autocomplete="off"
-                :value="formatValue(dateSelected)"
+                :value="formatValue(computedValue)"
                 :placeholder="placeholder"
                 :size="size"
                 :icon="icon"
@@ -21,9 +21,11 @@
                 :readonly="!editable"
                 :rounded="rounded"
                 v-bind="$attrs"
+                @click.native.stop="toggle(true)"
+                @keyup.native.enter="toggle(true)"
                 @change.native="onChange($event.target.value)"
-                @focus="$emit('focus', $event)"
-                @blur="$emit('blur', $event) && checkHtml5Validity()"/>
+                @focus="handleOnFocus"
+                @blur="onBlur() && checkHtml5Validity()"/>
 
             <b-dropdown-item :disabled="disabled" custom>
                 <b-field grouped position="is-centered">
@@ -92,20 +94,22 @@
             :disabled="disabled"
             :readonly="false"
             v-bind="$attrs"
-            @change.native="onChangeNativePicker"
-            @focus="$emit('focus', $event)"
-            @blur="$emit('blur', $event) && checkHtml5Validity()"/>
+            @click.native.stop="toggle(true)"
+            @keyup.native.enter="toggle(true)"
+            @change.native="onChange($event.target.value)"
+            @focus="handleOnFocus"
+            @blur="onBlur() && checkHtml5Validity()"/>
     </div>
 </template>
 
 <script>
+    import TimepickerMixin from '../../utils/TimepickerMixin'
     import Dropdown from '../dropdown/Dropdown'
     import DropdownItem from '../dropdown/DropdownItem'
     import Input from '../input/Input'
     import Field from '../field/Field'
     import Select from '../select/Select'
     import Icon from '../icon/Icon'
-    import TimepickerMixin from '../../utils/TimepickerMixin'
 
     export default {
         name: 'BTimepicker',

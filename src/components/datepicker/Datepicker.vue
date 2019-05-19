@@ -11,7 +11,7 @@
                 ref="input"
                 slot="trigger"
                 autocomplete="off"
-                :value="formatValue(dateSelected)"
+                :value="formatValue(computedValue)"
                 :placeholder="placeholder"
                 :size="size"
                 :icon="icon"
@@ -99,7 +99,7 @@
 
                 <div class="datepicker-content">
                     <b-datepicker-table
-                        v-model="dateSelected"
+                        v-model="computedValue"
                         :day-names="dayNames"
                         :month-names="monthNames"
                         :first-day-of-week="firstDayOfWeek"
@@ -302,6 +302,16 @@
             }
         },
         computed: {
+            computedValue: {
+                get() {
+                    return this.dateSelected
+                },
+                set(value) {
+                    this.updateInternalState(value)
+                    this.toggle(false)
+                    this.$emit('input', value)
+                }
+            },
             /*
             * Returns an array of years for the year dropdown. If earliest/latest
             * dates are set by props, range of years will fall within those dates.
@@ -344,28 +354,14 @@
             }
         },
         watch: {
-            /*
-            * Emit input event with selected date as payload, set isActive to false.
-            * Update internal focusedDateData
-            */
-            dateSelected(value) {
-                const currentDate = !value ? this.dateCreator() : value
-                this.focusedDateData = {
-                    month: currentDate.getMonth(),
-                    year: currentDate.getFullYear()
-                }
-                this.$emit('input', value)
-                this.toggle()
-            },
-
             /**
              * When v-model is changed:
              *   1. Update internal value.
              *   2. If it's invalid, validate again.
              */
             value(value) {
-                this.dateSelected = value
-
+                this.updateInternalState(value)
+                this.toggle(false)
                 !this.isValid && this.$refs.input.checkHtml5Validity()
             },
 
@@ -390,23 +386,16 @@
         },
         methods: {
             /*
-            * Emit input event with selected date as payload for v-model in parent
-            */
-            updateSelectedDate(date) {
-                this.dateSelected = date
-            },
-
-            /*
             * Parse string into date
             */
             onChange(value) {
                 const date = this.dateParser(value)
                 if (date && !isNaN(date)) {
-                    this.dateSelected = date
+                    this.computedValue = date
                 } else {
                     // Force refresh input value when not valid date
-                    this.dateSelected = null
-                    this.$refs.input.newValue = this.dateSelected
+                    this.computedValue = null
+                    this.$refs.input.newValue = this.computedValue
                 }
             },
 
@@ -472,7 +461,16 @@
             */
             onChangeNativePicker(event) {
                 const date = event.target.value
-                this.dateSelected = date ? new Date(date.replace(/-/g, '/')) : null
+                this.computedValue = date ? new Date(date.replace(/-/g, '/')) : null
+            },
+
+            updateInternalState(value) {
+                const currentDate = !value ? this.dateCreator() : value
+                this.focusedDateData = {
+                    month: currentDate.getMonth(),
+                    year: currentDate.getFullYear()
+                }
+                this.dateSelected = value
             },
 
             /*
@@ -501,7 +499,7 @@
              */
             keyPress(event) {
                 // Esc key
-                if (this.$refs.dropdown.isActive && event.keyCode === 27) {
+                if (this.$refs.dropdown && this.$refs.dropdown.isActive && event.keyCode === 27) {
                     this.toggle(false)
                 }
             }
