@@ -1,17 +1,18 @@
 <template>
     <div class="b-numberinput field" :class="fieldClasses">
-        <p class="control">
+        <p
+            class="control"
+            @mouseup="onStopLongPress(false)"
+            @mouseleave="onStopLongPress(false)"
+            @touchend="onStopLongPress(false)"
+            @touchcancel="onStopLongPress(false)">
             <button
                 type="button"
                 class="button"
                 :class="buttonClasses"
                 :disabled="disabled || disabledMin"
                 @mousedown="onStartLongPress($event, false)"
-                @mouseup="onStopLongPress(false)"
-                @mouseleave="onStopLongPress(false)"
                 @touchstart.prevent="onStartLongPress($event, false)"
-                @touchend="onStopLongPress(false)"
-                @touchcancel="onStopLongPress(false)"
                 @click="onControlClick($event, false)">
                 <b-icon
                     icon="minus"
@@ -37,21 +38,23 @@
             :icon-pack="iconPack"
             :autocomplete="autocomplete"
             :expanded="expanded"
+            :use-html5-validation="useHtml5Validation"
             @focus="$emit('focus', $event)"
             @blur="$emit('blur', $event)" />
 
-        <p class="control">
+        <p
+            class="control"
+            @mouseup="onStopLongPress(true)"
+            @mouseleave="onStopLongPress(true)"
+            @touchend="onStopLongPress(true)"
+            @touchcancel="onStopLongPress(true)">
             <button
                 type="button"
                 class="button"
                 :class="buttonClasses"
                 :disabled="disabled || disabledMax"
                 @mousedown="onStartLongPress($event, true)"
-                @mouseup="onStopLongPress(true)"
-                @mouseleave="onStopLongPress(true)"
                 @touchstart.prevent="onStartLongPress($event, true)"
-                @touchend="onStopLongPress(true)"
-                @touchcancel="onStopLongPress(true)"
                 @click="onControlClick($event, true)">
                 <b-icon
                     icon="plus"
@@ -114,7 +117,7 @@
                     }
                     this.newValue = newValue
                     this.$emit('input', newValue)
-                    this.$refs.input.checkHtml5Validity()
+                    !this.isValid && this.$refs.input.checkHtml5Validity()
                 }
             },
             fieldClasses() {
@@ -182,7 +185,8 @@
                 }
             },
             onControlClick(event, inc) {
-                if (event.detail !== 0) return
+                // IE 11 -> filter click event
+                if (event.detail !== 0 || event.type === 'click') return
                 if (inc) this.increment()
                 else this.decrement()
             },
@@ -190,14 +194,15 @@
                 if (event.button !== 0 && event.type !== 'touchstart') return
                 this._$intervalTime = new Date()
                 clearInterval(this._$intervalRef)
-                this._$intervalRef = this._$intervalRef = setInterval(() => {
+                this._$intervalRef = setInterval(() => {
                     if (inc) this.increment()
                     else this.decrement()
-                }, 100)
+                }, 250)
             },
             onStopLongPress(inc) {
+                if (!this._$intervalRef) return
                 const d = new Date()
-                if (d - this._$intervalTime < 100) {
+                if (d - this._$intervalTime < 250) {
                     if (inc) this.increment()
                     else this.decrement()
                 }

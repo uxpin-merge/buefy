@@ -20,10 +20,12 @@
                     <tr>
                         <th v-if="showDetailRowIcon" width="40px"/>
                         <th class="checkbox-cell" v-if="checkable">
-                            <b-checkbox
-                                :value="isAllChecked"
-                                :disabled="isAllUncheckable"
-                                @change.native="checkAll"/>
+                            <template v-if="headerCheckable">
+                                <b-checkbox
+                                    :value="isAllChecked"
+                                    :disabled="isAllUncheckable"
+                                    @change.native="checkAll"/>
+                            </template>
                         </th>
                         <th
                             v-for="(column, index) in visibleColumns"
@@ -32,7 +34,9 @@
                                 'is-current-sort': currentSortColumn === column,
                                 'is-sortable': column.sortable
                             }"
-                            :style="{ width: column.width + 'px' }"
+                            :style="{
+                                width: column.width === undefined ? null : column.width + 'px'
+                            }"
                             @click.stop="sort(column)">
                             <div
                                 class="th-wrap"
@@ -223,6 +227,10 @@
             loading: Boolean,
             detailed: Boolean,
             checkable: Boolean,
+            headerCheckable: {
+                type: Boolean,
+                default: true
+            },
             selected: Object,
             focusable: Boolean,
             customIsChecked: Function,

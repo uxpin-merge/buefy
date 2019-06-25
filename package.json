@@ -1,6 +1,6 @@
 {
   "name": "buefy",
-  "version": "0.7.6",
+  "version": "0.7.8",
   "homepage": "https://buefy.org",
   "description": "Lightweight UI components for Vue.js based on Bulma",
   "author": "Rafael Beraldo <rafael.pimpa@gmail.com>",
@@ -47,7 +47,7 @@
     "components"
   ],
   "dependencies": {
-    "bulma": "0.7.4"
+    "bulma": "0.7.5"
   },
   "peerDependencies": {
     "vue": "^2.5.13"
