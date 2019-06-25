@@ -102,19 +102,19 @@ const config = [
             file: 'dist/buefy.cjs.js'
         },
         plugins: [
-          replace({ 'process.env.NODE_ENV': 'production' }),
-          node({
-            extensions: ['.vue', '.js']
-          }),
-          cjs(),
-          vue({
-            css: true,
-            compileTemplate: true
-          }),
-          babel({
-            exclude: 'node_modules/**',
-            runtimeHelpers: true
-          })
+            replace({ 'process.env.NODE_ENV': 'production' }),
+            node({
+                extensions: ['.vue', '.js']
+            }),
+            cjs(),
+            vue({
+                css: true,
+                compileTemplate: true
+            }),
+            babel({
+                exclude: 'node_modules/**',
+                runtimeHelpers: true
+            })
         ]
     },
     {
@@ -150,7 +150,7 @@ const config = [
 export default (params) => {
     if (params.compact) {
         config.forEach((c) => {
-            c.output.file = c.output.file.replace(/.js/g, '.min.js')
+            c.output.file = c.output.file.replace(/\.js/g, '.min.js')
             c.plugins.push(terser())
         })
     }
