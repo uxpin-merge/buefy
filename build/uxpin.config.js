@@ -11,6 +11,13 @@ module.exports = {
     plugins: {
       serialization: (componentInfo) => {
         console.log(componentInfo);
+        return Promise.resolve({
+          result: {
+            name: 'Button',
+            properties: [],
+          },
+          warnings: [],
+        });
       },
     },
   },
