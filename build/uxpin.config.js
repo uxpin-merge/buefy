@@ -7,7 +7,12 @@ module.exports = {
           'src/components/button/Button.vue',
         ]
       }
-    ]
+    ],
+    plugins: {
+      serialization: (componentInfo) => {
+        console.log(componentInfo);
+      },
+    },
   },
   name: 'Buefy {Merge}',
 };
