@@ -1,3 +1,4 @@
+# ARCHIVED
 <p align="center">
     <a href="https://buefy.org">
         <img src="https://raw.githubusercontent.com/buefy/buefy/master/static/img/buefy-banner.png" />
